@@ -1,4 +1,5 @@
 import jwt from 'jsonwebtoken';
+import { blacklist } from '../controllers/user.Controllers.js';
 
 const authMiddleware = (req, res, next)=> {
     const authHeader = req.headers.authorization;
@@ -13,6 +14,13 @@ const authMiddleware = (req, res, next)=> {
     const token = authHeader.split(' ')[1];
 
     try {
+        if(!token || blacklist.has(token)){
+            return res.status(400).json({
+                message: "Token is expired or not valid",
+                success: false
+            })
+        };
+
         const decodedToken = jwt.verify(token, process.env.JWT_SECRET);
         if(decodedToken) {
             req.userId = decodedToken.userId;

@@ -4,6 +4,7 @@ import jwt  from "jsonwebtoken";
 import bcrypt from "bcrypt";
 import { Account } from "../models/account.models.js";
 
+export const blacklist = new Set();
 
 const signUpSchema = z.object({
     firstName: z.string().min(2).max(50),
@@ -36,10 +37,10 @@ const signUp = async (req, res)=> {
 
         const user = await User.create(validateData);
 
-        const token = jwt.sign({userId: user._id},
-            process.env.JWT_SECRET, 
-        );
-        console.log(token);
+        // const token = jwt.sign({userId: user._id},
+        //     process.env.JWT_SECRET, 
+        // );
+        // console.log(token);
 
         const accountCreated = await Account.create({userId: user._id, balance: 1 + Math.random()*1000});
 
@@ -88,12 +89,16 @@ const signIn = async (req, res)=> {
             })
         }
         
+       const token  = jwt.sign({userId: user._id}, process.env.JWT_SECRET);
+       console.log(token);
+
        return res.json({
             message: 'User logged in successfully',
             user: {
                 email: user.email,
                 firstName: user.firstName,
                 lastName: user.lastName,
+                token: token
             },
             success: true,
         })
@@ -166,6 +171,9 @@ const updateUser = async(req, res)=> {
 }
 
 const logout = async (req, res) => {
+
+        const token = req.headers.authorization?.split(" ")[1];
+
     try {
         if (!req.userId) {
             return res.status(400).json({
@@ -179,6 +187,7 @@ const logout = async (req, res) => {
             { new: true }
         );
 
+
         if (!user) {
             return res.status(404).json({
                 message: 'User not found',
@@ -186,6 +195,7 @@ const logout = async (req, res) => {
             });
         }
 
+        blacklist.add(token);
         res.status(200).json({
             message: 'User logged out successfully',
             success: true,
