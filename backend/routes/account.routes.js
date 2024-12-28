@@ -1,8 +1,7 @@
 import express from 'express';
-import router from './signIn.routes';
-import { authMiddleware } from '../middleware/authMiddleware';
-import { checkBalance } from '../controllers/account.Controllers.js';
 
+import { checkBalance } from '../controllers/account.Controllers.js';
+import { authMiddleware } from '../middleware/authMiddleware.js';
 
 const accountRoutes = express.Router();
 

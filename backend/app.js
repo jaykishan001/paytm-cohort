@@ -9,7 +9,7 @@ app.use(cors());
 app.use(express.urlencoded({extended: true}))
 app.use(cookieParser())
 
-import signInRoutes from './routes/signIn.routes.js';
+import userRouter from './routes/signIn.routes.js';
 import accountRoutes from './routes/account.routes.js';
 
 
@@ -19,7 +19,7 @@ app.get("/test", (req, res)=> {
       success: true,
     })
 })
-app.use("/api/v1/user/", signInRoutes);
+app.use("/api/v1/user/", userRouter);
 
 app.use("/api/v1/account", accountRoutes);
 

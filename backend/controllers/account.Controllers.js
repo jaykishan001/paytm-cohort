@@ -1,5 +1,6 @@
 import mongoose from "mongoose";
-import { Account } from "../models/account.models"
+import { Account } from "../models/account.models.js";
+
 
 
 const checkBalance = async (req, res) =>{

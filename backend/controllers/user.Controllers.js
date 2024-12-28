@@ -4,6 +4,7 @@ import jwt  from "jsonwebtoken";
 import bcrypt from "bcrypt";
 import { Account } from "../models/account.models.js";
 
+
 const signUpSchema = z.object({
     firstName: z.string().min(2).max(50),
     lastName: z.string().min(2).max(50),
