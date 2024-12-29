@@ -234,8 +234,8 @@ const getAllUsers = async(req, res) => {
                     lastName: user.lastName,
                     email: user.email,
                     _id: user._id
-                }))
-        })
+                })),
+                success: true})
     } catch (error) {
         return res.json({
             message: 'Error getting users',

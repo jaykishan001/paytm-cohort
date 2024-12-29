@@ -13,6 +13,8 @@ const authMiddleware = (req, res, next)=> {
     
     const token = authHeader.split(' ')[1];
 
+    console.log("token coming from frontend", token);
+
     try {
         if(!token || blacklist.has(token)){
             return res.status(400).json({
