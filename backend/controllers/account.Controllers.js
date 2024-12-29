@@ -65,10 +65,13 @@ const transferMoney  = async (req, res)=> {
             })
         }
         
-        user.balance -= transferAmount;
-        toUser.balance += transferAmount;
-        await user.save({session});
-        await toUser.save({session});
+        // user.balance -= transferAmount;
+        // toUser.balance += transferAmount;
+        // await user.save({session});
+        // await toUser.save({session});
+        
+        await Account.updateOne({userId: req.userId}, {$inc: {balance: -transferAmount}}).session(session);
+        await Account.updateMany({userId: to}, {$inc: {balance: +transferAmount}}).session(session);
         
         await session.commitTransaction();
         session.endSession();
